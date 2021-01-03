@@ -1,0 +1,81 @@
+<div class="container-fluid mb-5">
+    <h1>Karnataka Survey</h1>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" novalidate>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Name</label>
+                <input type="text" required #name="ngModel" class="form-control" [class.is-invalid]='name.invalid && name.touched' name="userName" [ngModel]>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Phone</label>
+                <input type="tel" class="form-control" name="phone" [ngModel]>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email" [ngModel]>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Organisation</label>
+                <input type="text" class="form-control" name="org" [ngModel]>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Responsibility</label>
+                <input type="text" class="form-control" name="res" [ngModel]>
+            </div>
+        </div>
+
+    
+        <ul>
+            <li class="mb-3" *ngFor="let topic of survey" ngModelGroup="{{topic.topicId}}">
+                {{topic.topicName}})<br><br>
+                <table class="table">
+                <thead>
+                    <th >Description</th>
+                    
+                    <th *ngFor="let que of topic.data[0].questions">{{que.question}}</th>
+
+                    <th>Suggestions for implementation in Karnataka</th>
+                        
+                </thead>
+                <tbody>
+                <tr *ngFor="let sec of topic.data" ngModelGroup="{{sec.ref}}">
+                    
+                        <td>
+                            
+                            {{sec.ref}} {{sec.desc}}
+                        
+                        </td>
+                        <td  *ngFor="let que of sec.questions" ngModelGroup="{{que.question}}">
+                            
+                                <div class="form-check" *ngFor="let opt of que.options">
+                                    <input class="form-check-input" type="checkbox" #name="ngModel" name="{{opt}}" [ngModel]="false" >
+                                    <label class="form-check-label"  >
+                                        {{opt}}
+                                        <div *ngIf="opt == 'Other'">
+                                            <input name="otherAns" [disabled]="!name.value" class="form-control" type="text" [ngModel]>
+                                        </div>
+                                    </label>
+                                </div>
+                        </td>
+
+                        <td>
+                            <input name="suggested" class="form-control" type="text" [ngModel]>
+                        </td>
+                   
+                </tr>
+                </tbody>
+                </table>    
+            </li>
+        </ul>
+
+        <button class="btn btn-primary" type="submit">Submit Form</button>
+
+        <hr />
+        {{userForm.value | json}}
+
+    </form>
+</div>
